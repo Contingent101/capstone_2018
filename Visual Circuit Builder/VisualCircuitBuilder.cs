@@ -17,5 +17,7 @@ namespace Visual_Circuit_Builder
             InitializeComponent();
             Console.WriteLine("Hello World");
         }
+
+     
     }          
 }
