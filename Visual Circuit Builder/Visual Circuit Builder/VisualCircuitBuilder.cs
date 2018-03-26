@@ -15,6 +15,7 @@ namespace Visual_Circuit_Builder
     public partial class VCB_Form : Form
     {
         //string Img_AND = "AND.jpg";
+        //Image Img_AND = Image.FromFile("AND.jpg");
         //string Img_NAND = "NAND.jpg";
         //string Img_OR = "OR.jpg";
         //string Img_NOR = "NOR.jpg";
@@ -24,6 +25,8 @@ namespace Visual_Circuit_Builder
 
         int PaintCalls = 0;
         //string Img_INPUT = "";
+        Font drawFont = new Font("Arial", 11);
+        SolidBrush drawBrush = new SolidBrush(Color.Black);
 
         public VCB_Form()
         {
@@ -36,6 +39,12 @@ namespace Visual_Circuit_Builder
         private const int rect_width = 48;
         private const int rect_height = 48;
         private const int leeway = 0;
+        private const int D0 = 12;
+        private const int D1 = 24;
+        private const int D2 = 36;
+        private const int D3 = 48;
+        private const int D1_Text = 18;
+        private const int D2_Text = 8;
 
         //Null Point 
         private Point Point_NULL = new Point(-1, -1);
@@ -55,6 +64,7 @@ namespace Visual_Circuit_Builder
         private bool IsDrawing = false;
         private bool IsLine = false;
         private bool IsGate = false;
+        private string gateName = "null";
         private Point NewPt1, NewPt2;
 
         /// <summary>
@@ -99,7 +109,7 @@ namespace Visual_Circuit_Builder
                 OffsetX = hit_point.X - e.X;
                 OffsetY = hit_point.Y - e.Y;
             }
-            if(MouseIsOverGate(e.Location, out segment_number, out hit_point))
+            else if(MouseIsOverGate(e.Location, out segment_number, out hit_point))
             {
                 MouseEvent.Text = "MouseIsOverEndPoint";
                 // Start moving this end point.
@@ -227,19 +237,19 @@ namespace Visual_Circuit_Builder
                     {
                         MousePointing.Text = "MousePoint: GateEndPoint";
                         /*Check each endpoint*/
-                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X - 24), (Pt1[i].Y - 12))) < over_dist_squared)
+                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X - D1), (Pt1[i].Y - D0))) < over_dist_squared)
                         {
-                            hit_pt = new Point((Pt1[i].X - 24), (Pt1[i].Y - 12));
+                            hit_pt = new Point((Pt1[i].X - D1), (Pt1[i].Y - D0));
                             return true;
                         }
-                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X + 24), Pt1[i].Y)) < over_dist_squared)
+                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X + D1), Pt1[i].Y)) < over_dist_squared)
                         {
-                            hit_pt = new Point((Pt1[i].X + 24), Pt1[i].Y);
+                            hit_pt = new Point((Pt1[i].X + D1), Pt1[i].Y);
                             return true;
                         }
-                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X - 24), (Pt1[i].Y) + 12)) < over_dist_squared)
+                        if (FindDistanceToPointSquared(mouse_pt, new Point((Pt1[i].X - D1), (Pt1[i].Y) + D0)) < over_dist_squared)
                         {
-                            hit_pt = new Point((Pt1[i].X - 24), (Pt1[i].Y) + 12);
+                            hit_pt = new Point((Pt1[i].X - D1), (Pt1[i].Y) + D0);
                             return true;
                         }
                     }
@@ -290,41 +300,49 @@ namespace Visual_Circuit_Builder
             {
                 IsGate = true;            
                 GateToolStrip.Text = "GateTooStrip: AND";
+                gateName = "AND";
             }
             else if (gate.Equals("NAND"))
             {
                 IsGate = true; //pictureBox.Image = Image.FromFile(Img_NAND);
                 GateToolStrip.Text = "GateToolStrip: NAND";
+                gateName = "NAND";
             }
             else if (gate.Equals("OR"))
             {
                 IsGate = true;
                 GateToolStrip.Text = "GateToolStrip: OR";
+                gateName = "OR";
             }
             else if (gate.Equals("NOR"))
             {
                 IsGate = true;//pictureBox.Image = Image.FromFile(Img_NOR);
                 GateToolStrip.Text = "GateToolStrip: NOR";
+                gateName = "NOR";
             }
             else if (gate.Equals("NOT"))
             {
                 IsGate = true; //pictureBox.Image = Image.FromFile(Img_NOT);
                 GateToolStrip.Text = "GateToolStrip: NOT";
+                gateName = "NOT";
             }
             else if (gate.Equals("XOR"))
             {
                 IsGate = true;//pictureBox.Image = Image.FromFile(Img_XOR);
                 GateToolStrip.Text = "GateToolStrip: XOR";
+                gateName = "XOR";
             }
             else if (gate.Equals("XNOR"))
             {
                 IsGate = true;//pictureBox.Image = Image.FromFile(Img_XNOR);
                 GateToolStrip.Text = "GateToolStrip: XNOR";
+                gateName = "XNOR";
             }
             else
             {
                 IsGate = true;
                 Console.WriteLine("INPUT"); //no image yet
+                gateName = "INPUT";
             }
 
            // Invalidate();
@@ -513,20 +531,58 @@ namespace Visual_Circuit_Builder
 
         // We're moving an end point.
         /* Input: MouseEvent 
-         * Output: call to invalidat
+         * Output: call to invalidate
          * Process: Check is the mouse if over the start endpoint or the last endpoint. 
          * When the mouse moves update the endpoint and call invalidate to paint.*/
         private void picCanvas_MouseMove_MovingEndPoint(object sender, MouseEventArgs e)
         {
             Point hit_pt;
+            int segment_number;
+            Point hit_point;
             MouseEvent.Text = "MouseMove_MoveingEndPoint";
             // Move the point to its new location.
             if (MovingStartPoint)
             {
                 if (MouseIsOverGateEndpoint(e.Location, out hit_pt))
                     SetMouse(hit_pt);
-                Pt1[MovingSegment] = 
-                    new Point(e.X + OffsetX, e.Y + OffsetY); 
+                Pt1[MovingSegment] =
+                    new Point(e.X + OffsetX, e.Y + OffsetY);
+
+                if ((MouseIsOverGate(e.Location, out segment_number, out hit_point)))
+                {
+                    MouseEvent.Text = "MouseMove_MovingGate";
+                    for (int i = 0; i < Pt1.Count; i++)
+                    {
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y - D0)), Pt2[i]) < over_dist_squared)
+                        {
+                            Pt2[i] = new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y - D0));
+
+                        }
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X + D1), Pt1[MovingSegment].Y), Pt2[i]) < over_dist_squared)
+                        {
+                            Pt2[i] = new Point((Pt1[MovingSegment].X + D1), Pt1[MovingSegment].Y);
+
+                        }
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y) + D0), Pt2[i]) < over_dist_squared)
+                        {
+                            Pt2[i] = new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y) + D0);
+                        }
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y - D0)), Pt1[i]) < over_dist_squared)
+                        {
+                            Pt1[i] = new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y - D0));
+
+                        }
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X + D1), Pt1[MovingSegment].Y), Pt1[i]) < over_dist_squared)
+                        {
+                            Pt1[i] = new Point((Pt1[MovingSegment].X + D1), Pt1[MovingSegment].Y);
+
+                        }
+                        if (FindDistanceToPointSquared(new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y) + D0), Pt1[i]) < over_dist_squared)
+                        {
+                            Pt1[i] = new Point((Pt1[MovingSegment].X - D1), (Pt1[MovingSegment].Y) + D0);
+                        }
+                    }
+                }
             }
             else
             {
@@ -538,18 +594,6 @@ namespace Visual_Circuit_Builder
 
             // Redraw.
             picCanvas.Invalidate();
-        }
-
-        private void picCanvas_MouseMove_MovingGate(object sender, MouseEventArgs e)
-        {
-
-
-        }
-
-        private void picCanvas_MouseUp_MovingGate(object sender, MouseEventArgs e)
-        {
-
-
         }
 
         // Stop moving the end point.
@@ -577,28 +621,21 @@ namespace Visual_Circuit_Builder
             MouseCoordinates.Text = "MouseCoord: " + "(" + e.X + "," + e.Y + ")";
             MouseEvent.Text = "MouseMove_Drawing";
             //Here check if we are near a gate and snap it to the closet endpoint. 
-            IsNearGateEndPoint(e.Location);
             // Save the new point.
             if (IsLine)
             {
-                 if (MouseIsOverGateEndpoint(e.Location, out hit_pt))
-                    SetMouse(hit_pt); 
+                if (MouseIsOverGateEndpoint(e.Location, out hit_pt))
+                    SetMouse(hit_pt);
                 NewPt2 = new Point(e.X, e.Y); //as the user moves the mouse update the last point
             }
-            if(IsGate)
+            if (IsGate)
             {
-                
                 NewPt1 = new Point(e.X, e.Y); //as the user moves the mouse update the last point
             }
             // Redraw.
             picCanvas.Invalidate();
-        }
 
-        private void IsNearGateEndPoint(Point location)
-        {
-            //Fcn to snap the endpoint onto the gate. 
         }
-
         // Stop drawing.
         private void picCanvas_MouseUp_Drawing(object sender, MouseEventArgs e)
         {
@@ -632,36 +669,37 @@ namespace Visual_Circuit_Builder
           
                 for (int i = 0; i < Pt1.Count; i++)
                 {
-                    // If square pt2[i] should contain -1,-1 
-                    if (Pt2[i] == new Point(-1, -1))
-                    {
-                        //Draw the rectangle
-                        e.Graphics.DrawRectangle(Pens.Red, Pt1[i].X - 24, Pt1[i].Y - 24, rect_width, rect_height);
-                        
-                        //Draw the connectors
-                        Rectangle A_rect_connect = new Rectangle(
-                               (((Pt1[i].X - 24) + 48) - object_radius), (((Pt1[i].Y - 24) + 24) - object_radius),
-                               2 * object_radius + 1, 2 * object_radius + 1);
-                        e.Graphics.FillEllipse(Brushes.White, A_rect_connect);
-                        e.Graphics.DrawEllipse(Pens.Black, A_rect_connect);
+                // If square pt2[i] should contain -1,-1 
+                if (Pt2[i] == new Point(-1, -1))
+                {
+                    //Draw the rectangle
+                    e.Graphics.FillRectangle(Brushes.Green, Pt1[i].X - D1, Pt1[i].Y - D1, rect_width, rect_height);
+                    e.Graphics.DrawString(gateName, drawFont, drawBrush, Pt1[i].X - D1_Text, Pt1[i].Y - D2_Text);
 
-                        Rectangle B_rect_connect = new Rectangle(
-                            (((Pt1[i].X - 24)) - object_radius), (((Pt1[i].Y - 24) + 12) - object_radius),
-                            2 * object_radius + 1, 2 * object_radius + 1);
-                        e.Graphics.FillEllipse(Brushes.White, B_rect_connect);
-                        e.Graphics.DrawEllipse(Pens.Black, B_rect_connect);
 
-                        Rectangle C_rect_connect = new Rectangle(
-                               (((Pt1[i].X - 24)) - object_radius), (((Pt1[i].Y - 24)+ 36) - object_radius),
-                               2 * object_radius + 1, 2 * object_radius + 1);
-                        e.Graphics.FillEllipse(Brushes.White, C_rect_connect);
-                        e.Graphics.DrawEllipse(Pens.Black, C_rect_connect);
+                    //Draw the connectors
+                    Rectangle A_rect_connect = new Rectangle(
+                           (((Pt1[i].X - D1) + D3) - object_radius), (((Pt1[i].Y - D1) + D1) - object_radius),
+                           2 * object_radius + 1, 2 * object_radius + 1);
+                    e.Graphics.FillEllipse(Brushes.White, A_rect_connect);
+                    e.Graphics.DrawEllipse(Pens.Black, A_rect_connect);
 
-                    }
-                    else
-                    {
-                        e.Graphics.DrawLine(Pens.Blue, Pt1[i], Pt2[i]);
-                    }
+                    Rectangle B_rect_connect = new Rectangle(
+                        (((Pt1[i].X - D1)) - object_radius), (((Pt1[i].Y - D1) + D0) - object_radius),
+                        2 * object_radius + 1, 2 * object_radius + 1);
+                    e.Graphics.FillEllipse(Brushes.White, B_rect_connect);
+                    e.Graphics.DrawEllipse(Pens.Black, B_rect_connect);
+
+                    Rectangle C_rect_connect = new Rectangle(
+                           (((Pt1[i].X - D1)) - object_radius), (((Pt1[i].Y - D1) + D2) - object_radius),
+                           2 * object_radius + 1, 2 * object_radius + 1);
+                    e.Graphics.FillEllipse(Brushes.White, C_rect_connect);
+                    e.Graphics.DrawEllipse(Pens.Black, C_rect_connect);
+                }
+                else
+                {
+                    e.Graphics.DrawLine(Pens.Blue, Pt1[i], Pt2[i]);
+                }
                 }
 
                 // Draw the end points.
