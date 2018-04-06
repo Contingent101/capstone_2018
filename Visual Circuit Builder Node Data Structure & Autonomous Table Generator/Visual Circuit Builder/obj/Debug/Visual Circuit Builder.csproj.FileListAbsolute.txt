@@ -1,0 +1,30 @@
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe.config
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.pdb
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csprojResolveAssemblyReference.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.VCB_Form.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.Properties.Resources.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.GenerateResource.Cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.pdb
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.CoreCompileInputs.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csprojResolveAssemblyReference.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.VCB_Form.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.Properties.Resources.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.GenerateResource.Cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.CoreCompileInputs.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.pdb
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe.config
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.pdb
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe.config
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\bin\Debug\Visual Circuit Builder.pdb
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csprojResolveAssemblyReference.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.VCB_Form.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual_Circuit_Builder.Properties.Resources.resources
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.GenerateResource.Cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.csproj.CoreCompileInputs.cache
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.exe
+C:\Users\Victor\Desktop\Capstone\Visual Circuit Builder Node Data Structure & Autonomous Table Generator\Visual Circuit Builder\obj\Debug\Visual Circuit Builder.pdb
