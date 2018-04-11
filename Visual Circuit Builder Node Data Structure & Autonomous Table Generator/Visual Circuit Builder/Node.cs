@@ -11,15 +11,15 @@ namespace Visual_Circuit_Builder
     {
         private string id;
         private Point point;
-        private Point p_point;
+        
         private int in1;
         private int in2;
+        private int value;
         private int nextGate;
         private int out3;
-        private bool value;
 
 
-        public bool Value
+        public int Value
         {
             get
             {
@@ -114,20 +114,6 @@ namespace Visual_Circuit_Builder
             set
             {
                 this.point = value;
-            }
-        }
-        /// <summary>
-        /// accessor for the parent point of the current gate.
-        /// </summary>
-        public Point Parent_Point
-        {
-            get
-            {
-                return this.p_point;
-            }
-            set
-            {
-                this.p_point = value;
             }
         }
         /// <summary>

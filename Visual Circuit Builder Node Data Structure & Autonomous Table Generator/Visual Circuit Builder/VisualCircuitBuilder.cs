@@ -46,6 +46,8 @@ namespace Visual_Circuit_Builder
         private const int D3 = 48;
         private const int D1_Text = 18;
         private const int D2_Text = 8;
+        private const int top_connection = 1;
+        private const int bottom_connction = 2;
         private int child = 0;
         private int current = 0;
         private int parent = 0;
@@ -72,6 +74,7 @@ namespace Visual_Circuit_Builder
         private bool IsDrawing = false;
         private bool IsLine = false;
         private bool IsGate = false;
+        private bool toggle = false;
         private string gateName = "null";
         private Point NewPt1, NewPt2;
 
@@ -101,10 +104,17 @@ namespace Visual_Circuit_Builder
             Point hit_point; 
             int segment_number; // for lines
             int gate_number;
+            int toggle;
 
+
+            //Fcn that check if we are over the toggle button
+            if (MouseIsOverToggleButton(e.Location)) {
+                
+                picCanvas.Invalidate(); }
             //Check If the e.X and Y is near an endpoint or gate center point.
-            if (MouseIsOverEndpoint(e.Location, out segment_number, out hit_point)) 
+            else if (MouseIsOverEndpoint(e.Location, out segment_number, out hit_point)) 
             {
+                
                 MouseEvent.Text = "MouseIsOverEndPoint";
                 // Start moving this end point.
                 picCanvas.MouseMove -= picCanvas_MouseMove_NotDown;
@@ -124,6 +134,7 @@ namespace Visual_Circuit_Builder
             }
             else if(MouseIsOverGate(e.Location, out gate_number, out hit_point))
             {
+                
                 MouseEvent.Text = "MouseIsOverEndPoint";
                 // Start moving this end point.
                 picCanvas.MouseMove -= picCanvas_MouseMove_NotDown;
@@ -179,14 +190,64 @@ namespace Visual_Circuit_Builder
                 else
                 {
                     Gates[Last] = new Gate(gateName);
+                    Gates[Last].Value = -1;
+                    Gates[Last].In1 = -1;
+                    Gates[Last].In2 = -1;
                     Gates[Last].Point = new Point(e.X, e.Y);
-                  
-
                 }
 
             }
            
         }
+
+        private bool MouseIsOverToggleButton(Point location)
+        {
+            for(int i = 0; i < Last; i++)
+            {
+                //Toggle Button
+                if (FindDistanceToPointSquared(location, new Point((Gates[i].Point.X), (Gates[i].Point.Y - D1))) < over_dist_squared)
+                {
+                   
+                        if (Gates[i].Value == 0)
+                        {
+                            Gates[i].Value = 1;
+                        }
+                        else
+                        {
+                            Gates[i].Value = 0;
+                        }
+
+                        if(Gates[i].Out == 1)
+                        Gates[Gates[i].ParentGate].In1 = Gates[i].Value;
+                    
+                        if (Gates[i].Out == 2)
+                        Gates[Gates[i].ParentGate].In2 = Gates[i].Value;
+
+                    int gate = Gates[i].ParentGate;
+
+                    do
+                    {
+                       
+                        GateHasTwoConnections(gate);
+
+                        if (Gates[gate].Out == 1)
+                            Gates[Gates[gate].ParentGate].In1 = Gates[gate].Value;
+
+                        if (Gates[gate].Out == 2)
+                            Gates[Gates[gate].ParentGate].In2 = Gates[gate].Value;
+
+                        gate = Gates[gate].ParentGate;
+                    }
+                    while (Gates[gate].ParentGate != 0);
+                    GateHasTwoConnections(gate);
+                   
+                    return true;
+                   
+                }
+            }
+            return false;
+        }
+
         //END of MouseDown
 
         /// <summary>
@@ -232,6 +293,7 @@ namespace Visual_Circuit_Builder
                 SetMouse(hit_point);
                 new_cursor = Cursors.Arrow;
             }
+       
 
             // Set the new cursor.
             if (picCanvas.Cursor != new_cursor)
@@ -254,9 +316,10 @@ namespace Visual_Circuit_Builder
                 {
 
                         MousePointing.Text = "MousePoint: GateEndPoint";
-                        /*Check each endpoint*/
-                        //Top Connection
-                        if (FindDistanceToPointSquared(mouse_pt, new Point((Gates[i].Point.X - D1), (Gates[i].Point.Y - D0))) < over_dist_squared)
+                    /*Check each endpoint*/
+                   
+                    //Top Connection
+                    if (FindDistanceToPointSquared(mouse_pt, new Point((Gates[i].Point.X - D1), (Gates[i].Point.Y - D0))) < over_dist_squared)
                         {
                             hit_pt = new Point((Gates[i].Point.X - D1), (Gates[i].Point.Y - D0));
                             current = i;
@@ -732,17 +795,28 @@ namespace Visual_Circuit_Builder
                 if(MouseIsOverGateEndpoint(e.Location, out hit_pt))
                 {
                     parent = current;
-                    if (conn == 1)
+                    if (conn == top_connection)
                     {
-                        Gates[child].Out = 1;
+                        Gates[child].Out = top_connection;
                         Gates[child].ParentGate = parent;
+                        Gates[parent].In1 = Gates[child].Value;
                     }
                     else
                     {
-                        Gates[child].Out = 2;
+                        Gates[parent].In2 = Gates[child].Value;
+                        Gates[child].Out = bottom_connction;
                         Gates[child].ParentGate = parent;
                     }
                     
+                }
+                if (Gates[parent] != null)
+                {
+                    if ((Gates[parent].In1 != -1 && Gates[parent].In2 != -1) || Gates[parent].ID == "NOT")
+                    {
+                        GateHasTwoConnections(parent);
+                    }
+                    else
+                        Gates[parent].Value = -1;
                 }
                 Pt1.Add(NewPt1);
                 Pt2.Add(NewPt2);
@@ -752,13 +826,67 @@ namespace Visual_Circuit_Builder
                 Gates[Last].Point = new Point(e.X, e.Y);
                 Last++;
             }
-            /*NOTE! - Here is were we can add the point to a datastructure.*/
-
-            // Redraw.
+        
             IsDrawing = false;
             IsLine = false;
             IsGate = false;
             picCanvas.Invalidate();
+        }
+
+        private void GateHasTwoConnections(int parent)
+        {
+            if (Gates[parent].ID == "AND" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+                if (Gates[parent].In1 == 1 && Gates[parent].In2 == 1)
+                    Gates[parent].Value = 1;
+                else
+                    Gates[parent].Value = 0;
+
+            if (Gates[parent].ID == "OR" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+                if (Gates[parent].In1 == 0 && Gates[parent].In2 == 0)
+                    Gates[parent].Value = 0;
+                else
+                    Gates[parent].Value = 1;
+
+            if(Gates[parent].ID == "NOT" && Gates[parent].In1 != -1)
+                if (Gates[parent].In1 == 0)
+                    Gates[parent].Value = 1;
+                else
+                    Gates[parent].Value = 0;
+
+            if (Gates[parent].ID == "NOR" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+                if (Gates[parent].In1 == 0 && Gates[parent].In2 == 0)
+                    Gates[parent].Value = 1;
+                else
+                    Gates[parent].Value = 0;
+            if (Gates[parent].ID == "XOR" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+            {
+                if (Gates[parent].In1 == 0 && Gates[parent].In2 == 0)
+                    Gates[parent].Value = 0;
+                else if (Gates[parent].In1 == 1 && Gates[parent].In2 == 1)
+                    Gates[parent].Value = 0;
+                else
+                    Gates[parent].Value = 1;
+            }
+            if (Gates[parent].ID == "XNOR" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+            {
+                if (Gates[parent].In1 == 0 && Gates[parent].In2 == 0)
+                    Gates[parent].Value = 1;
+                else if (Gates[parent].In1 == 1 && Gates[parent].In2 == 1)
+                    Gates[parent].Value = 1;
+                else
+                    Gates[parent].Value = 0;
+            }
+
+            if (Gates[parent].ID == "NAND" && Gates[parent].In1 != -1 && Gates[parent].In2 != -1)
+            {
+                if (Gates[parent].In1 == 1 && Gates[parent].In2 == 1)
+                    Gates[parent].Value = 0;
+                else
+                    Gates[parent].Value = 1;
+            }
+
+
+
         }
 
         private void PopulateGatesArray(int count, string line, int Last)
@@ -769,10 +897,9 @@ namespace Visual_Circuit_Builder
             Gates[Last].Point = new Point(Int32.Parse(data[1]), Int32.Parse(data[2]));
             Gates[Last].In1 = Int32.Parse(data[3]);
             Gates[Last].In2 = Int32.Parse(data[4]);
-          
-            Gates[Last].ParentGate = Int32.Parse(data[5]);
-            Gates[Last].Parent_Point = new Point(Int32.Parse(data[6]), Int32.Parse(data[7]));
-            Gates[Last].Out = Int32.Parse(data[8]);
+            Gates[Last].Value = Int32.Parse(data[5]);
+            Gates[Last].ParentGate = Int32.Parse(data[6]);
+            Gates[Last].Out = Int32.Parse(data[7]);
             return;
         }
 
@@ -822,17 +949,28 @@ namespace Visual_Circuit_Builder
                 for (int i = 0; i < Last; i++)
                 {
                     //Draw the rectangle
+                    if(Gates[i].Value == 1)
+                    e.Graphics.FillRectangle(Brushes.Green, Gates[i].Point.X - D1, Gates[i].Point.Y - D1, rect_width, rect_height);
+                    if(Gates[i].Value == 0)
+                    e.Graphics.FillRectangle(Brushes.Red, Gates[i].Point.X - D1, Gates[i].Point.Y - D1, rect_width, rect_height);
+                if (Gates[i].Value == -1)
                     e.Graphics.FillRectangle(Brushes.Gray, Gates[i].Point.X - D1, Gates[i].Point.Y - D1, rect_width, rect_height);
-                    e.Graphics.DrawString(Gates[i].ID, drawFont, drawBrush, Gates[i].Point.X - D1_Text, Gates[i].Point.Y - D2_Text);
+
+                e.Graphics.DrawString(Gates[i].ID, drawFont, drawBrush, Gates[i].Point.X - D1_Text, Gates[i].Point.Y - D2_Text);
 
                 if (Gates[i].ID == "IN")
                 {
-
                     Rectangle IN_out_rect_connect = new Rectangle(
                           (((Gates[i].Point.X - D1) + D3) - object_radius), ((Gates[i].Point.Y) - object_radius),
                           2 * object_radius + 1, 2 * object_radius + 1);
-                    e.Graphics.FillEllipse(Brushes.White, IN_out_rect_connect);
+                       e.Graphics.FillEllipse(Brushes.White, IN_out_rect_connect);
                     e.Graphics.DrawEllipse(Pens.Black, IN_out_rect_connect);
+
+                    Rectangle IN_Toggle_rect_connect = new Rectangle(
+                       ((Gates[i].Point.X) - object_radius), ((Gates[i].Point.Y - D1) - object_radius),
+                       2 * object_radius + 1, 2 * object_radius + 1);
+                    e.Graphics.DrawRectangle(Pens.Black, IN_Toggle_rect_connect);
+                    e.Graphics.FillRectangle(Brushes.Black, IN_Toggle_rect_connect);
                 }
                 else if(Gates[i].ID == "END")
                 {
@@ -922,58 +1060,28 @@ namespace Visual_Circuit_Builder
 
         private void sAVEToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BuildArrayGates();
+            //BuildArrayGates();
             using (System.IO.StreamWriter file =
             new System.IO.StreamWriter("Circuit.txt"))
             {
                 for (int i = 0; i < Last; i++)
                 {
                     string line = Gates[i].ID + "," + Gates[i].Point.X.ToString() + "," + Gates[i].Point.Y.ToString() + "," + Gates[i].In1.ToString() + ","
-                        + Gates[i].In2.ToString() + "," + Gates[i].ParentGate + "," + Gates[i].Parent_Point.X.ToString() + ","
-                        + Gates[i].Parent_Point.Y.ToString() + "," + Gates[i].Out.ToString();
+                        + Gates[i].In2.ToString() + "," + Gates[i].Value+ "," + Gates[i].ParentGate + "," + Gates[i].Out.ToString();
 
                     file.WriteLine(line);
                 }
-
             }
         }
 
-        public void BuildArrayGates()
+        private void rESETToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //for each point in List<Point> check if its connected to a gates endpoint. 
-            //mark down that gates id and point.
-            //check the other endpoint and see if its connected to gate2 as well.
-            //Note: check for doubles like checking pt1 and then finding pt2 later and repeating the process
-            string GateStart;
-
-            Point NextPoint = new Point(0, 0); ;
-           
-           
-            //For each point.
-            for (int start = 0; start < Last; start++)
-            {
-                if(Gates[start].ID == "IN")
-                {
-                    foreach (Point target in Pt1)
-                        if (FindDistanceToPointSquared(new Point((Gates[start].Point.X + D1), Gates[start].Point.Y), target) < over_dist_squared)
-                            Gates[start].Out = 1;
-                    foreach (Point target in Pt2)
-                        if (FindDistanceToPointSquared(new Point((Gates[start].Point.X + D1), Gates[start].Point.Y), target) < over_dist_squared)
-                            Gates[start].Out = 1;
-
-                    BuildCircuit_Recursively(Gates[start].ID, Gates[start].Point, NextPoint);
-                }
-                
-            }
-
+            Gates = new Gate[50];
+            Last = 0;
+            Pt1.Clear();
+            Pt2.Clear();
+            picCanvas.Invalidate();
         }
-
-        public void BuildCircuit_Recursively(string child_ID, Point child_point, Point next_point)
-        {
-           
-        }
-
-
     }
 
 

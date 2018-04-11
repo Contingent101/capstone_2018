@@ -131,6 +131,7 @@
             this.rESETToolStripMenuItem.Name = "rESETToolStripMenuItem";
             this.rESETToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
             this.rESETToolStripMenuItem.Text = "RESET";
+            this.rESETToolStripMenuItem.Click += new System.EventHandler(this.rESETToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
