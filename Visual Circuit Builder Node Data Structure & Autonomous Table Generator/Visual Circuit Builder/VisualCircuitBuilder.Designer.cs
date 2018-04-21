@@ -55,6 +55,10 @@
             this.XnorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eNDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.circuitname = new System.Windows.Forms.TextBox();
+            this.circuitnamelabel = new System.Windows.Forms.Label();
+            this.dELETEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteLabel = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.picCanvas)).BeginInit();
             this.FunctionMenuStrip.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -68,9 +72,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picCanvas.BackColor = System.Drawing.Color.White;
             this.picCanvas.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.picCanvas.Location = new System.Drawing.Point(12, 45);
+            this.picCanvas.Location = new System.Drawing.Point(12, 55);
             this.picCanvas.Name = "picCanvas";
-            this.picCanvas.Size = new System.Drawing.Size(720, 488);
+            this.picCanvas.Size = new System.Drawing.Size(881, 474);
             this.picCanvas.TabIndex = 0;
             this.picCanvas.TabStop = false;
             this.picCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.picCanvas_Paint);
@@ -87,49 +91,50 @@
             this.sLOWRUNToolStripMenuItem,
             this.sAVEToolStripMenuItem,
             this.lOADToolStripMenuItem,
-            this.rESETToolStripMenuItem});
-            this.FunctionMenuStrip.Location = new System.Drawing.Point(731, 0);
+            this.rESETToolStripMenuItem,
+            this.dELETEToolStripMenuItem});
+            this.FunctionMenuStrip.Location = new System.Drawing.Point(906, 0);
             this.FunctionMenuStrip.Name = "FunctionMenuStrip";
-            this.FunctionMenuStrip.Size = new System.Drawing.Size(98, 571);
+            this.FunctionMenuStrip.Size = new System.Drawing.Size(84, 567);
             this.FunctionMenuStrip.TabIndex = 1;
             this.FunctionMenuStrip.Text = "FunctionMenuStrip";
             // 
             // sTOPToolStripMenuItem
             // 
             this.sTOPToolStripMenuItem.Name = "sTOPToolStripMenuItem";
-            this.sTOPToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.sTOPToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.sTOPToolStripMenuItem.Text = "STOP";
             // 
             // rUNToolStripMenuItem
             // 
             this.rUNToolStripMenuItem.Name = "rUNToolStripMenuItem";
-            this.rUNToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.rUNToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.rUNToolStripMenuItem.Text = "RUN";
             // 
             // sLOWRUNToolStripMenuItem
             // 
             this.sLOWRUNToolStripMenuItem.Name = "sLOWRUNToolStripMenuItem";
-            this.sLOWRUNToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.sLOWRUNToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.sLOWRUNToolStripMenuItem.Text = "SLOW RUN";
             // 
             // sAVEToolStripMenuItem
             // 
             this.sAVEToolStripMenuItem.Name = "sAVEToolStripMenuItem";
-            this.sAVEToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.sAVEToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.sAVEToolStripMenuItem.Text = "SAVE";
             this.sAVEToolStripMenuItem.Click += new System.EventHandler(this.sAVEToolStripMenuItem_Click);
             // 
             // lOADToolStripMenuItem
             // 
             this.lOADToolStripMenuItem.Name = "lOADToolStripMenuItem";
-            this.lOADToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.lOADToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.lOADToolStripMenuItem.Text = "LOAD";
             this.lOADToolStripMenuItem.Click += new System.EventHandler(this.Open_File);
             // 
             // rESETToolStripMenuItem
             // 
             this.rESETToolStripMenuItem.Name = "rESETToolStripMenuItem";
-            this.rESETToolStripMenuItem.Size = new System.Drawing.Size(85, 19);
+            this.rESETToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
             this.rESETToolStripMenuItem.Text = "RESET";
             this.rESETToolStripMenuItem.Click += new System.EventHandler(this.rESETToolStripMenuItem_Click);
             // 
@@ -143,10 +148,11 @@
             this.MouseCoordinates,
             this.DrawingObject,
             this.MousePointing,
-            this.SegmentsTool});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 546);
+            this.SegmentsTool,
+            this.DeleteLabel});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 542);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(731, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(906, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -215,7 +221,7 @@
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.menuStrip.Size = new System.Drawing.Size(731, 24);
+            this.menuStrip.Size = new System.Drawing.Size(906, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -290,13 +296,44 @@
             this.eNDToolStripMenuItem.Text = "END";
             this.eNDToolStripMenuItem.Click += new System.EventHandler(this.onClick);
             // 
+            // circuitname
+            // 
+            this.circuitname.Location = new System.Drawing.Point(99, 29);
+            this.circuitname.Name = "circuitname";
+            this.circuitname.Size = new System.Drawing.Size(165, 20);
+            this.circuitname.TabIndex = 3;
+            // 
+            // circuitnamelabel
+            // 
+            this.circuitnamelabel.AutoSize = true;
+            this.circuitnamelabel.Location = new System.Drawing.Point(26, 32);
+            this.circuitnamelabel.Name = "circuitnamelabel";
+            this.circuitnamelabel.Size = new System.Drawing.Size(70, 13);
+            this.circuitnamelabel.TabIndex = 4;
+            this.circuitnamelabel.Text = "Circuit Name:";
+            // 
+            // dELETEToolStripMenuItem
+            // 
+            this.dELETEToolStripMenuItem.Name = "dELETEToolStripMenuItem";
+            this.dELETEToolStripMenuItem.Size = new System.Drawing.Size(71, 19);
+            this.dELETEToolStripMenuItem.Text = "DELETE";
+            this.dELETEToolStripMenuItem.Click += new System.EventHandler(this.dELETEToolStripMenuItem_Click);
+            // 
+            // DeleteLabel
+            // 
+            this.DeleteLabel.Name = "DeleteLabel";
+            this.DeleteLabel.Size = new System.Drawing.Size(70, 22);
+            this.DeleteLabel.Text = "Delete: false";
+            // 
             // VCB_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(829, 571);
+            this.ClientSize = new System.Drawing.Size(990, 567);
+            this.Controls.Add(this.circuitnamelabel);
+            this.Controls.Add(this.circuitname);
             this.Controls.Add(this.picCanvas);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip);
@@ -344,6 +381,10 @@
         private System.Windows.Forms.ToolStripMenuItem XnorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eNDToolStripMenuItem;
+        private System.Windows.Forms.TextBox circuitname;
+        private System.Windows.Forms.Label circuitnamelabel;
+        private System.Windows.Forms.ToolStripMenuItem dELETEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripLabel DeleteLabel;
     }
 }
 
